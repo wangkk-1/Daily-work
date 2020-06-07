@@ -41,7 +41,6 @@
 </template>
 
 <script>
-let a = 0;
 export default {
   name: "Header",
   data() {
@@ -70,9 +69,7 @@ export default {
       }
       // this.$router.push(location); //重复跳转回抛出错误
       //使用的是vue-router3.1.0的语法,内部不会抛出错误的promise
-      this.$router.push(location, () => {
-        console.log("跳转成功的回调");
-      });
+      this.$router.push(location);
       //使用的是vue-router新的语法,返回的是promise
       /* this.$router.push(location).catch(() => {
         console.log("出错了");

@@ -11,6 +11,10 @@
 import LsitContainer from "./ListContainer/ListContainer";
 export default {
   name: "Home",
+  mounted() {
+    this.$store.dispatch("getBanners");
+    this.$store.dispatch("getFloors");
+  },
   components: {
     LsitContainer
   }

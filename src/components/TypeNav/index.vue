@@ -1,7 +1,40 @@
 <template>
   <div class="type-nav">
     <div class="container">
-      <h2 class="all">全部商品分类</h2>
+      <div @mouseleave="hideSubCategorys" @mouseenter="showCategorys">
+        <h2 class="all">全部商品分类</h2>
+        <transition name="move">
+          <div class="sort" v-show="isShowFirst">
+            <div class="all-sort-list2" @click="toSearch2">
+              <div class="item" @mouseenter="showSubScategorys(index)" :class="{item_on:index===currentIndex}" v-for="(c1,index) in categoryList" :key="c1.categoryId">
+                <h3>
+                  <!-- <router-link :to="`/search?categoryName=${c1.categoryName}&category1Id=${c1.categoryId}`" >{{c1.categoryName}}</router-link> -->
+                  <!-- <a href="javascript:" @click="toSearch({categoryName:c1.categoryName,category1Id:c1.categoryId})">{{c1.categoryName}}</a> -->
+                  <a href="javascript:" :data-categoryName="c1.categoryName" :data-category1Id="c1.categoryId">{{c1.categoryName}}</a>
+                </h3>
+                <div class="item-list clearfix">
+                  <div class="subitem">
+                    <dl class="fore" v-for="c2 in c1.categoryChild" :key="c2.categoryId">
+                      <dt>
+                        <!-- <router-link :to="`/search?categoryName=${c2.categoryName}&category2Id=${c2.categoryId}`">{{c2.categoryName}}</router-link> -->
+                        <!-- <a href="javescript:" @click="toSearch({categoryName:c2.categoryName,category2Id:c2.categoryId})">{{c2.categoryName}}</a> -->
+                        <a href="javescript:" :data-categoryName="c2.categoryName" :data-category2Id="c2.categoryId">{{c2.categoryName}}</a>
+                      </dt>
+                      <dd>
+                        <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
+                          <!-- <router-link :to="`/search?categoryName=${c3.categoryName}&category3Id=${c3.categoryId}`">{{c3.categoryName}}</router-link> -->
+                          <!-- <a href="javescript:"  @click="toSearch({categoryName:c3.categoryName,category3Id:c3.categoryId})">{{c3.categoryName}}</a> -->
+                          <a href="javescript:" :data-categoryName="c3.categoryName" :data-category3Id="c3.categoryId">{{c3.categoryName}}</a>
+                        </em>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </transition>
+      </div>
       <nav class="nav">
         <a href="###">服装城</a>
         <a href="###">美妆馆</a>
@@ -12,50 +45,103 @@
         <a href="###">有趣</a>
         <a href="###">秒杀</a>
       </nav>
-      <div class="sort">
-        <div class="all-sort-list2">
-          <div class="item" v-for="c1 in categoryList" :key="c1.categoryId">
-            <h3>
-              <a href="javascript:">{{c1.categoryName}}</a>
-            </h3>
-            <div class="item-list clearfix">
-              <div class="subitem">
-                <dl class="fore" v-for="c2 in c1.categoryChild" :key="c2.categoryId">
-                  <dt>
-                    <a href="javescript:">{{c2.categoryName}}</a>
-                  </dt>
-                  <dd>
-                    <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
-                      <a href="javescript:">{{c3.categoryName}}</a>
-                    </em>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import throttle from "loadsh/throttle";
+// import { mapActions,mapState } from "vuex";
 export default {
   name: "TypeNav",
+  data() {
+    return {
+      currentIndex: -2,
+      isShowFirst: this.$route.path === "/"
+    };
+  },
   computed: {
+    //3级列表数据
     categoryList() {
       return this.$store.state.home.categoryList;
-    }
+    },
+     
   },
   mounted() {
-    // this.categoryList();
-    this.$store.dispatch("getCategoryList");
+    // this.getCategoryList();
+    this.$store.dispatch("getCategoryList")
+   
   },
   methods: {
-    ...mapActions(["getCategoryList"]),
-    btn() {
-      console.log(this.categoryList);
+    // ...mapActions(["getCategoryList"]),//getCategoryList(){this.$store.dispatch("getCategoryList")}
+    //移入子列表显示    函数节流
+    showSubScategorys: throttle(function(index) {
+      if (this.currentIndex !== -2) {
+        this.currentIndex = index;
+      }
+    }, 200),
+    //移出隐藏子列表   (解决快速移出问题)
+    hideSubCategorys() {
+      this.currentIndex = -2;
+      //如果当前不是首页,需要隐藏一级列表
+      if (this.$route.path !== "/") {
+        this.isShowFirst = false;
+      }
+    },
+    //移入显示列表
+    showCategorys() {
+      this.isShowFirst = true;
+      this.currentIndex = -1;
+    },
+    //编程式路由导航  事件太多 已注释
+    toSearch({ categoryName, category1Id, category2Id, category3Id }) {
+      console.log(111);
+      const query = {
+        categoryName: categoryName
+      };
+      if (category1Id) {
+        query.category1Id = category1Id;
+      } else if (category2Id) {
+        query.category2Id = category2Id;
+      } else if (category3Id) {
+        query.category3Id = category3Id;
+      }
+      const location = {
+        name: "search",
+        query
+      };
+      this.$router.push(location);
+    },
+    //使用事件委派进行编程式路由跳转  (点击A标签时调用hideSubCategorys隐藏列表)
+    toSearch2(event) {
+      // console.log(event.target.tagName)
+      // const tagName = event.target.tagName
+      //取出data自定义属性
+      const {categoryname,category1id,category2id,category3id} = event.target.dataset;
+      if (!categoryname) return;
+      const query = {
+        categoryName: categoryname
+      };
+      if (category1id) {
+        query.category1Id = category1id;
+      } else if (category2id) {
+        query.category2Id = category2id;
+      } else if (category3id) {
+        query.category3Id = category3id;
+      }
+      
+      const location = {
+        name: "search",
+        query
+      };
+      //取出当前params中的keyword
+      const keyword = this.$route.params.keyword
+      if (keyword) {
+        location.params = {keyword}
+      }
+      this.$router.push(location);
+      //自动隐藏列表
+      this.hideSubCategorys();
     }
   }
 };
@@ -101,7 +187,13 @@ export default {
       position: absolute;
       background: #fafafa;
       z-index: 999;
-
+      &.move-enter-active{
+        transition: all .5s;
+      }
+      &.move-enter,&.move-leave-to{
+        opacity: 0;
+        height: 0;
+      }
       .all-sort-list2 {
         .item {
           h3 {
@@ -171,7 +263,8 @@ export default {
             }
           }
 
-          &:hover {
+          &.item_on {
+            background: #ccc;
             .item-list {
               display: block;
             }

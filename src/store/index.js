@@ -14,10 +14,9 @@ export default new Vuex.Store({
     mutations,
     actions,
     getters,
-   
+
     modules: {
         home: home, //标识名称:vuex子模块
         user, //简写
-
     }
 })

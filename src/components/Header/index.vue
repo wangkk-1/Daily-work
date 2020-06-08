@@ -67,6 +67,7 @@ export default {
         location.params = { keyword };
         location.query = { keyword2: keyword.toUpperCase() };
       }
+      location.query = this.$route.query
       // this.$router.push(location); //重复跳转回抛出错误
       //使用的是vue-router3.1.0的语法,内部不会抛出错误的promise
       this.$router.push(location);

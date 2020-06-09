@@ -26,7 +26,7 @@
     <!--头部第二行 搜索区域-->
     <div class="bottom">
       <h1 class="logoArea">
-        <router-link to="/" class="logo" title="尚品汇" target="_blank">
+        <router-link to="/" class="logo" title="尚品汇">
           <img src="./images/logo.png" alt />
         </router-link>
       </h1>
@@ -67,7 +67,7 @@ export default {
         location.params = { keyword };
         location.query = { keyword2: keyword.toUpperCase() };
       }
-      location.query = this.$route.query
+      location.query = this.$route.query;
       // this.$router.push(location); //重复跳转回抛出错误
       //使用的是vue-router3.1.0的语法,内部不会抛出错误的promise
       this.$router.push(location);

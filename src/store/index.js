@@ -1,7 +1,9 @@
 import Vue from "vue"
 import Vuex from "vuex"
-import home from "./modules/home"
+/* import home from "./modules/home"
 import user from "./modules/user"
+import search from "./modules/search" */
+import modules from "./modules"
 Vue.use(Vuex)
 
 // const state = {}
@@ -14,9 +16,10 @@ export default new Vuex.Store({
     mutations,
     actions,
     getters,
-
-    modules: {
+    modules
+    /* modules: {
         home: home, //标识名称:vuex子模块
         user, //简写
-    }
+        search
+    } */
 })

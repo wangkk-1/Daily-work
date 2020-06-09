@@ -21,5 +21,8 @@ export function reqLogin(mobile, password) {
 export const reqCategoryList = () => ajax('/product/getBaseCategoryList')
 
 //定义mock接口的接口请求函数
-export const reqBanners = () =>mockAjax('/banners')
-export const reqFloors = () =>mockAjax('/floors')
+export const reqBanners = () => mockAjax('/banners')
+export const reqFloors = () => mockAjax('/floors')
+
+//Search 商品列表reqCategoryList
+export const reqProductList = (options) => ajax.post('/list', options)

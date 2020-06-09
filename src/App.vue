@@ -9,7 +9,7 @@
 <script>
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-import { reqCategoryList,reqBanners,reqFloors } from "./api";
+// import { reqCategoryList,reqBanners,reqFloors } from "./api";
 export default {
   name: "App",
   async mounted() {

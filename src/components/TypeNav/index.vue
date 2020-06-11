@@ -18,13 +18,13 @@
                       <dt>
                         <!-- <router-link :to="`/search?categoryName=${c2.categoryName}&category2Id=${c2.categoryId}`">{{c2.categoryName}}</router-link> -->
                         <!-- <a href="javescript:" @click="toSearch({categoryName:c2.categoryName,category2Id:c2.categoryId})">{{c2.categoryName}}</a> -->
-                        <a href="javescript:" :data-categoryName="c2.categoryName" :data-category2Id="c2.categoryId">{{c2.categoryName}}</a>
+                        <a href="javascript:" :data-categoryName="c2.categoryName" :data-category2Id="c2.categoryId">{{c2.categoryName}}</a>
                       </dt>
                       <dd>
                         <em v-for="c3 in c2.categoryChild" :key="c3.categoryId">
                           <!-- <router-link :to="`/search?categoryName=${c3.categoryName}&category3Id=${c3.categoryId}`">{{c3.categoryName}}</router-link> -->
                           <!-- <a href="javescript:"  @click="toSearch({categoryName:c3.categoryName,category3Id:c3.categoryId})">{{c3.categoryName}}</a> -->
-                          <a href="javescript:" :data-categoryName="c3.categoryName" :data-category3Id="c3.categoryId">{{c3.categoryName}}</a>
+                          <a href="javascript:" :data-categoryName="c3.categoryName" :data-category3Id="c3.categoryId">{{c3.categoryName}}</a>
                         </em>
                       </dd>
                     </dl>
@@ -95,7 +95,6 @@ export default {
     },
     //编程式路由导航  事件太多 已注释
     toSearch({ categoryName, category1Id, category2Id, category3Id }) {
-      console.log(111);
       const query = {
         categoryName: categoryName
       };
@@ -139,7 +138,11 @@ export default {
       if (keyword) {
         location.params = {keyword}
       }
-      this.$router.push(location);
+      if(this.$route.path.indexOf("/search")!==0){
+        this.$router.push(location)
+      }else{
+        this.$router.replace(location)
+      }
       //自动隐藏列表
       this.hideSubCategorys();
     }

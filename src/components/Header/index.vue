@@ -48,6 +48,11 @@ export default {
       keyword: ""
     };
   },
+  mounted() {
+    this.$bus.$on("removeKeyword", () => {
+      this.keyword = "";
+    });
+  },
   methods: {
     search() {
       const { keyword } = this;
@@ -70,12 +75,15 @@ export default {
       location.query = this.$route.query;
       // this.$router.push(location); //重复跳转回抛出错误
       //使用的是vue-router3.1.0的语法,内部不会抛出错误的promise
-      this.$router.push(location);
+      if (this.$route.name !== "search") {
+        this.$router.push(location);
+      } else {
+        this.$router.replace(location);
+      }
       //使用的是vue-router新的语法,返回的是promise
       /* this.$router.push(location).catch(() => {
         console.log("出错了");
       }); */
-      this.keyword = "";
     }
   }
 };

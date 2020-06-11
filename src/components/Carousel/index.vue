@@ -25,7 +25,6 @@ export default {
   },
   mounted() {
     if (this.carouselList.length > 0) {
-      console.log(555);
       this.initSwiper();
     }
   },

@@ -13,7 +13,7 @@
         </div>
         <div class="typeList">
           <a href="###">我的订单</a>
-          <a href="###">我的购物车</a>
+          <router-link to="shopcart">我的购物车</router-link>
           <a href="###">我的尚品汇</a>
           <a href="###">尚品汇会员</a>
           <a href="###">企业采购</a>
@@ -33,7 +33,7 @@
       <div class="searchArea">
         <form action="###" class="searchForm">
           <input type="text" id="autocomplete" class="input-error input-xxlarge" v-model="keyword" />
-          <button class="sui-btn btn-xlarge btn-danger"  @click.prevent="search">搜索</button>
+          <button class="sui-btn btn-xlarge btn-danger" @click.prevent="search">搜索</button>
         </form>
       </div>
     </div>

@@ -84,12 +84,12 @@
             </div>
             <div class="cartWrap">
               <div class="controls">
-                <input autocomplete="off" class="itxt" />
-                <a href="javascript:" class="plus">+</a>
-                <a href="javascript:" class="mins">-</a>
+                <input autocomplete="off" type="number" class="itxt" v-model="skuNum" />
+                <a href="javascript:" class="plus" @click="skuNum=skuNum*1+1">+</a>
+                <a href="javascript:" class="mins" @click="skuNum=skuNum*1>1?skuNum-1:skuNum">-</a>
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a href="javascript:" @click="addToCart">加入购物车</a>
               </div>
             </div>
           </div>
@@ -336,7 +336,8 @@ export default {
   name: "Detail",
   data() {
     return {
-      currentIndex: 0
+      currentIndex: 0, //当前图片下标
+      skuNum: 1 //商品的数量
     };
   },
   computed: {
@@ -354,9 +355,37 @@ export default {
     },
     //选中销售属性值
     checkValue(value, valueList) {
-      if(value.isChecked==='1') return
+      if (value.isChecked === "1") return;
       valueList.forEach(value => (value.isChecked = "0"));
       value.isChecked = "1";
+    },
+    //添加到购物车
+    addToCart() {
+      const skuNum = this.skuNum;
+      const skuId = this.$route.params.id;
+      //方式一
+      /* this.$store.dispatch("addToCart1", { skuNum, skuId,callback:this.callback}); */
+      //方式二
+      const promise = this.$store.dispatch("addToCart2", { skuNum, skuId });
+      promise
+        .then(() => {
+          //成功了
+          //将当前商品的一些信息保存到sessionStorage中
+          window.sessionStorage.setItem('SKU_INFO_KEY', JSON.stringify(this.skuInfo))
+          this.$router.push({path:'/addcartsuccess',query:{skuNum}});
+        })
+        .catch(error => {
+          alert(error.message);
+        });
+    },
+    //方法一 执行成功或者失败后 才回调执行的方法  errorMsg;显示的错误信息
+    callback(errorMsg) {
+      if (errorMsg) {
+        alert(errorMsg); //失败  提示
+      } else {
+        //成功了,跳转成功的路由
+        this.$router.push("/addcartsuccess");
+      }
     }
   },
   components: {

@@ -5,7 +5,11 @@
       <div class="container">
         <div class="loginList">
           <p>尚品汇欢迎您！</p>
-          <p>
+          <p v-if="userInfo.token">
+            <span>{{userInfo.name}}</span> &nbsp;&nbsp;
+            <a href="javascript:" @click="exitAccount">退出</a>
+          </p>
+          <p v-else>
             <span>请</span>
             <router-link to="/login">登录</router-link>
             <router-link to="/register" class="register">免费注册</router-link>
@@ -84,6 +88,17 @@ export default {
       /* this.$router.push(location).catch(() => {
         console.log("出错了");
       }); */
+    },
+    //退出账号
+    exitAccount() {
+      if(window.confirm('确定退出账号么?')){
+        this.$store.dispatch("logout");
+      }
+    }
+  },
+  computed: {
+    userInfo() {
+      return this.$store.state.user.userInfo;
     }
   }
 };

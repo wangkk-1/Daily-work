@@ -1,5 +1,6 @@
 import axios from "axios"
 import NProgress from "nprogress"
+import store from '../store'
 
 // const instance = axios.create({
 //     baseURL: 'http://182.92.128.115/api', //基础地址
@@ -15,8 +16,8 @@ const instance = axios.create({
 instance.interceptors.request.use(config => {
     //显示进度条
     NProgress.start()
+    config.headers['userTempId'] = store.state.user.userTempId
     return config
-
 })
 // 注册响应拦截器
 instance.interceptors.response.use(
@@ -30,7 +31,6 @@ instance.interceptors.response.use(
         NProgress.done()
         //统一处理错误
         // throw error
-        console.log(111)
         return Promise.reject(error)
     }
 )

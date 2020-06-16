@@ -361,7 +361,7 @@ export default {
     },
     //添加到购物车
     addToCart() {
-      const skuNum = this.skuNum;
+      let skuNum = this.skuNum;
       const skuId = this.$route.params.id;
       //方式一
       /* this.$store.dispatch("addToCart1", { skuNum, skuId,callback:this.callback}); */
@@ -371,8 +371,11 @@ export default {
         .then(() => {
           //成功了
           //将当前商品的一些信息保存到sessionStorage中
-          window.sessionStorage.setItem('SKU_INFO_KEY', JSON.stringify(this.skuInfo))
-          this.$router.push({path:'/addcartsuccess',query:{skuNum}});
+          window.sessionStorage.setItem(
+            "SKU_INFO_KEY",
+            JSON.stringify(this.skuInfo)
+          );
+          this.$router.push({ path: "/addcartsuccess", query: { skuNum } });
         })
         .catch(error => {
           alert(error.message);
@@ -572,6 +575,12 @@ export default {
                 float: left;
                 border-right: 0;
                 text-align: center;
+              }
+              //取消数字输入框中的上下按钮
+              input::-webkit-outer-spin-button,
+              input::-webkit-inner-spin-button {
+                -webkit-appearance: none !important;
+                margin: 0;
               }
 
               .plus,

@@ -18,7 +18,6 @@ VueRouter.prototype.push = function (location, onComplete, onAbort) {
 }
 
 
-
 VueRouter.prototype.replace = function (location, onComplete, onAbort) {
     if (!onComplete && !onAbort) {
         return originReplace.call(this, location).catch(error => {
@@ -28,7 +27,6 @@ VueRouter.prototype.replace = function (location, onComplete, onAbort) {
         originReplace.call(this, location, onComplete, onAbort)
     }
 }
-
 
 
 export default new VueRouter({

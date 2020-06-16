@@ -24,7 +24,6 @@ instance.interceptors.response.use(
         NProgress.done()
         //统一处理错误
         // throw error
-        console.log(111)
         return Promise.reject(error)
     }
 )

@@ -75,19 +75,18 @@ const actions = {
 }
 const getters = {
     //选中总数量
-    totalCount(state){
+    totalCount (state) {
         /* let total = 0
         state.cartList.forEach(item=>{
             total+=item.skuNum
         })
         return state.cartList */
-        return state.cartList.reduce((preTotal, item) => preTotal + item.skuNum , 0)
-         
-
+        return state.cartList.reduce((preTotal, item, index) => preTotal + (item.isChecked===1?item.skuNum:0) , 0)
     },
+
     //选中总价格
-    totalPrice(state){
-        return state.cartList.reduce((pre, item) => pre + item.skuNum*item.cartPrice , 0)
+    totalPrice (state) {
+        return state.cartList.reduce((pre, item, index) => pre + item.skuNum*item.cartPrice , 0)
     },
     //是否全部选中了
     isCheckAll (state) {

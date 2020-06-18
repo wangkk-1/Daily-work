@@ -1,6 +1,7 @@
 import Vue from "vue"
 import VueRouter from 'vue-router'
 import routes from './routes'
+import stote from "../store"
 Vue.use(VueRouter)
 
 //重写VueRouter上的push方法
@@ -28,11 +29,35 @@ VueRouter.prototype.replace = function (location, onComplete, onAbort) {
     }
 }
 
-
-export default new VueRouter({
+const router = new VueRouter({
     mode: "history",
     routes,
-    scrollBehavior (to,from,savedPosition){
-        return {x:0,y:0}
+    scrollBehavior(to, from, savedPosition) {
+        return {
+            x: 0,
+            y: 0
+        }
     }
 })
+
+
+const checkPaths = ['/trade', '/pay', '/center']
+router.beforeEach((to, from, next) => {
+    //得到目标路径
+    const targetPath = to.path
+    const needCheck = !!checkPaths.find(path => targetPath.indexOf(path) === 0)
+    if (needCheck) {
+        const token = stote.state.user.userInfo.token
+        if (token) {
+            next()
+        } else {
+            next('/login')
+        }
+    } else {
+        next()
+    }
+})
+
+
+
+export default router

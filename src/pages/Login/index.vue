@@ -16,8 +16,10 @@
             <form action="##">
               <div class="input-text clearFix">
                 <i></i>
-                <input type="text" placeholder="手机号" v-model="mobile" />
-                <!-- <span class="error-msg">错误提示信息</span> -->
+                <input type="text" placeholder="手机号" v-model="mobile" 
+                  v-validate="{required: true,regex: /^1\d{10}$/}" name="phone"
+                  :class="{invalid: errors.has('phone')}"/>
+                <span class="error-msg">{{ errors.first('phone') }}</span>
               </div>
 
               <div class="input-text clearFix">
@@ -98,6 +100,16 @@ export default {
         alert(error.message);
       }
     }
+  },
+  beforeRouteEnter(to,from,next){
+    next(vm=>{
+      const token = vm.$store.state.user.userInfo.token
+      if(token){
+        next('/')
+      }else{
+        next()
+      }
+    })
   }
 };
 </script>

@@ -15,10 +15,10 @@ export default {
     },
     actions: {
         //注册
-        async register({commit}, userInfo) {
+        async register ({commit}, userInfo) {
             const result = await reqRegister(userInfo)
-            if (result.code !== 200) {
-                throw new Error(result.message || '注册失败')
+            if (result.code!==200) {
+                throw new Error(result.data || '注册失败')
             }
         },
         //登录
